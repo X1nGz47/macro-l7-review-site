@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宏观 L7 复习入口</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #17202d;
+      --muted: #607081;
+      --line: #d6dfea;
+      --blue: #1e6da1;
+      --green: #25855d;
+      --shadow: 0 10px 28px rgba(23, 32, 45, 0.08);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(180deg, #edf4fb 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    .page {
+      min-height: 100vh;
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      display: grid;
+      align-content: center;
+      padding: 24px 0 40px;
+      gap: 18px;
+    }
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 26px;
+      display: grid;
+      gap: 14px;
+    }
+    h1, h2, p { margin: 0; }
+    h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.1;
+    }
+    .hero p, .card p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .tag {
+      width: fit-content;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+    .tag-blue { background: var(--blue); }
+    .tag-green { background: var(--green); }
+    .btn {
+      display: inline-block;
+      width: fit-content;
+      text-decoration: none;
+      border-radius: var(--radius);
+      padding: 11px 14px;
+      color: #fff;
+      background: var(--blue);
+      font-size: 14px;
+    }
+    .btn.green { background: var(--green); }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>宏观 L7 复习入口</h1>
+      <p>内容依据：宏观 L7 第十一章《国民收入的决定：IS-LM 模型》。这里有两个页面，一个适合先看知识结构，一个适合直接刷题。</p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <span class="tag tag-blue">知识复习</span>
+        <h2>知识可视化卡片</h2>
+        <p>适合先看一遍结构。里面有 IS、LM、IS-LM 共同均衡、政策效果、易错点，还有“经济直觉”帮助理解。</p>
+        <a class="btn" href="./macro_l7_cards.html">打开知识卡片</a>
+      </article>
+
+      <article class="card">
+        <span class="tag tag-green">练习刷题</span>
+        <h2>交互式刷题页</h2>
+        <p>适合做选择、判断和填空题。支持即时判分、错题回看和按主题筛题。</p>
+        <a class="btn green" href="./macro_l7_quiz.html">打开刷题页</a>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
