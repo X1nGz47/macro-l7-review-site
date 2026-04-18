@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宏观 L7 复习卡片</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #18212f;
+      --muted: #5d6a7a;
+      --line: #d8e1ec;
+      --blue: #2274a5;
+      --green: #2d936c;
+      --gold: #d18f00;
+      --red: #b84a62;
+      --shadow: 0 10px 28px rgba(24, 33, 47, 0.08);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(180deg, #eef4fb 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 16px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.1;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f9fbfe;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .layout {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .side, .main-panel { display: grid; gap: 16px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .panel h2, .panel h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+    .tree {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    .tree strong { color: var(--text); }
+    .memory-box, .quick-list, .toolbar { display: grid; gap: 10px; }
+    .memory-row {
+      border-left: 4px solid var(--blue);
+      background: #f8fbff;
+      padding: 10px 12px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .filter-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      min-height: 250px;
+    }
+    .card-top {
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
+    }
+    .card-tag {
+      width: fit-content;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .tag-is { background: var(--blue); }
+    .tag-lm { background: var(--green); }
+    .tag-joint { background: var(--gold); }
+    .tag-mistake { background: var(--red); }
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+    .card-summary {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .card-body {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .card-body ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .mini-title {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .formula {
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fafcff;
+      padding: 10px 12px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .intuition {
+      border: 1px solid #d9e9f6;
+      border-radius: var(--radius);
+      background: #f3f9ff;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+    .intuition strong {
+      display: inline-block;
+      margin-right: 6px;
+      color: var(--blue);
+    }
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 12px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      font-size: 14px;
+    }
+    .footer-link {
+      display: inline-block;
+      margin-top: 4px;
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div>
+        <h1>宏观 L7 复习卡片</h1>
+        <p>内容依据：<strong>宏观 L7 第十一章《国民收入的决定：IS-LM 模型》</strong>。这个页面适合先看结构、再记重点、最后查易错点。</p>
+      </div>
+      <div class="hero-meta">
+        <span class="pill">只依据已上传课件整理</span>
+        <span class="pill">主题：IS 曲线 / LM 曲线 / IS-LM 共同均衡</span>
+        <span class="pill">适合考前速看</span>
+      </div>
+    </section>
+    <div class="layout">
+      <aside class="side">
+        <section class="panel">
+          <h2>知识树</h2>
+          <ul class="tree">
+            <li><strong>IS 曲线</strong>
+              <ul>
+                <li>商品市场均衡</li>
+                <li>负斜率</li>
+                <li>看自发支出怎么变</li>
+              </ul>
+            </li>
+            <li><strong>LM 曲线</strong>
+              <ul>
+                <li>货币市场均衡</li>
+                <li>正斜率</li>
+                <li>看货币供给和货币需求怎么变</li>
+              </ul>
+            </li>
+            <li><strong>IS-LM 交点</strong>
+              <ul>
+                <li>同时决定收入 Y 和利率 r</li>
+                <li>看财政政策和货币政策效果</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h2>考前速记</h2>
+          <div class="memory-box">
+            <div class="memory-row"><strong>IS：</strong>商品市场均衡，利率降，投资升，收入升，所以是负斜率。</div>
+            <div class="memory-row"><strong>LM：</strong>货币市场均衡，收入升，货币需求升，利率升，所以是正斜率。</div>
+            <div class="memory-row"><strong>财政扩张：</strong>IS 右移，通常是 Y 上升、r 上升。</div>
+            <div class="memory-row"><strong>货币扩张：</strong>LM 右移/下移，通常是 Y 上升、r 下降。</div>
+          </div>
+        </section>
+        <section class="panel">
+          <h2>页面跳转</h2>
+          <p style="margin:0;color:var(--muted);font-size:14px;line-height:1.7;">看完卡片后，可以直接打开刷题页做练习。</p>
+          <a class="footer-link" href="./macro_l7_quiz.html">打开刷题页</a>
+        </section>
+      </aside>
+      <main class="main-panel">
+        <section class="panel toolbar">
+          <input id="searchInput" class="search" type="text" placeholder="搜索关键词，例如：挤出效应 / 流动性陷阱 / 财政政策" />
+          <div class="filter-row" id="filters"></div>
+        </section>
+        <section id="cardsContainer" class="cards"></section>
+      </main>
+    </div>
+  </div>
+  <script>
+    const cards = [
+      { tag: "IS", title: "IS 曲线是什么", summary: "一句话：IS 曲线表示商品市场达到均衡时，利率 r 和收入 Y 的组合。", details: ["课件里把商品市场均衡写成 Y=AD，也说明成 I=S。", "它关注的是：利率变化后，投资怎么变，收入怎么变。", "所以 IS 曲线本质上是在讲商品市场里的因果链。"], formula: "商品市场均衡：Y = AD；也可理解为 I = S", intuition: "经济直觉：利率像企业借钱成本。利率高，企业更不想投；利率低，企业更愿意投。投资一变，总需求就变，最后把均衡收入一起带着变。", colorClass: "tag-is" },
+      { tag: "IS", title: "为什么 IS 是负斜率", summary: "一句话：利率下降会刺激投资，投资增加后收入上升，所以 r 和 Y 反向变化。", details: ["利率下降 -> 投资 I 增加。", "投资增加 -> 总需求增加 -> 收入 Y 增加。", "因此 IS 曲线向右下方倾斜。"], formula: "r↓ -> I↑ -> Y↑", intuition: "经济直觉：钱更便宜了，企业更愿意借钱扩产、买设备、开项目。企业花的钱变多，市场需求也更强，产出和收入就会上去，所以利率低时更容易对应高收入。", colorClass: "tag-is" },
+      { tag: "IS", title: "IS 曲线的斜率", summary: "一句话：斜率大小主要看乘数大小和投资对利率的敏感性。", details: ["乘数越大，利率变化带来的收入变化越大，IS 越平缓。", "投资对利率越敏感，利率稍微变一点，投资就变很多，IS 也会更平缓。", "你可以理解为：投资越容易被利率带动，整条链条反应越明显。"], formula: "乘数越大 / 投资对利率越敏感 -> IS 越平缓", intuition: "经济直觉：如果企业对利率特别敏感，那利率一降，投资会立刻明显增加；如果居民消费的连锁反应也强，那最开始那一点投资增加会层层放大，所以收入会动得更厉害，曲线就更平。", colorClass: "tag-is" },
+      { tag: "IS", title: "IS 曲线为什么会移动", summary: "一句话：只要自发支出变了，IS 就会移动。", details: ["课件列出的典型因素有：消费增加、政府购买增加、出口增加或进口减少。", "这些变化会让每个利率水平下的均衡收入更高。", "所以扩张性支出会让 IS 右移。"], formula: "自发支出增加 -> IS 右移", intuition: "经济直觉：哪怕利率没变，只要家庭更愿意消费、政府多花钱、出口更强，市场上一开始就多了一股需求力量。这样在每个利率水平下，经济都能撑起更高的收入，所以整条 IS 往右推。", colorClass: "tag-is" },
+      { tag: "LM", title: "LM 曲线是什么", summary: "一句话：LM 曲线表示货币市场达到均衡时，收入 Y 和利率 r 的组合。", details: ["课件先问：既然 IS 已经讲了 r 对 Y 的影响，那 r 自己是怎么决定的？", "答案就是：看货币需求和货币供给。", "货币市场均衡条件写成 M/P = L(r, Y)。"], formula: "货币市场均衡：M/P = L(r, Y)", intuition: "经济直觉：市场上的钱不是越多越好、也不是越少越好，要刚好匹配大家想持有的钱。钱偏少时，大家会更在意手里的现金，利率就容易被推高；钱偏多时，利率就容易下去。", colorClass: "tag-lm" },
+      { tag: "LM", title: "货币需求的三种动机", summary: "一句话：人们持有货币，主要是为了交易、预防和投机。", details: ["交易动机：日常买卖需要现金。", "预防动机：为意外支出留一部分钱。", "投机动机：为了等更好的金融资产买入机会。"], formula: "货币需求函数：L = L(r, Y)", intuition: "经济直觉：钱放在手里虽然方便，但也有代价，因为这部分钱没去买债券、没去赚收益。于是人们会在“方便”与“收益”之间做选择，这就是为什么货币需求既看收入，也看利率。", colorClass: "tag-lm" },
+      { tag: "LM", title: "LM 为什么是正斜率", summary: "一句话：收入增加会让货币需求增加，钱显得更紧，于是利率上升。", details: ["收入 Y 增加，人们交易更多，需要持有更多货币。", "在货币供给不变时，需求增加会把利率往上推。", "因此 LM 曲线向右上方倾斜。"], formula: "Y↑ -> L↑ -> r↑", intuition: "经济直觉：经济更热、交易更多，大家口袋里和账户里都想多留一点钱周转。可央行没多放钱时，钱就显得紧，大家会卖债券换现金，债券价格跌、利率升，所以更高收入常对应更高利率。", colorClass: "tag-lm" },
+      { tag: "LM", title: "LM 曲线的斜率与位置", summary: "一句话：课件用 k/h 表示 LM 的斜率，位置主要受货币供给和货币需求变化影响。", details: ["k 代表货币需求对收入的敏感性。", "h 代表货币需求对利率的敏感性。", "实际货币供给增加时，LM 会右移或下移。"], formula: "L = kY - hr；LM 斜率常写作 k/h", intuition: "经济直觉：如果收入一增加，大家就特别想多拿现金，那利率就会被拉得更快，LM 更陡；如果大家对利率很敏感，利率一动就愿意改变持币量，那同样的收入变化只要较小利率变动就能平衡，LM 就更平。", colorClass: "tag-lm" },
+      { tag: "LM", title: "流动性陷阱", summary: "一句话：利率低到一定程度后，人们更愿意一直拿着钱，货币政策会变得很弱。", details: ["课件把它也叫凯恩斯陷阱。", "这时货币需求对利率非常敏感。", "图形上可理解成 LM 在这个区域很平。"], formula: "利率极低 -> 货币需求对利率无限敏感", intuition: "经济直觉：当利率已经很低时，人们会觉得债券价格高得差不多了，再买债券不划算，还可能亏。于是新增货币大多被拿在手里，不继续压低利率，货币政策往前推经济的力道就弱了。", colorClass: "tag-lm" },
+      { tag: "IS-LM", title: "共同均衡怎么看", summary: "一句话：IS 和 LM 的交点，就是商品市场和货币市场同时均衡的点。", details: ["这个交点同时决定均衡收入 Y 和均衡利率 r。", "只看一条曲线不够，必须两条一起看。", "考试里常让你判断某个政策冲击后，交点怎么变。"], formula: "IS 与 LM 交点 -> 均衡 Y、均衡 r", intuition: "经济直觉：商品市场要看东西卖不卖得出去，货币市场要看钱够不够用。只有两边都不别扭，企业生产计划和大家持币意愿才同时站得住，这时的收入和利率才是真正稳定的。", colorClass: "tag-joint" },
+      { tag: "IS-LM", title: "四个失衡区域", summary: "一句话：交点外的不同区域，商品市场和货币市场会分别出现供给过多或需求过多。", details: ["IS 线上：商品市场均衡。", "LM 线上：货币市场均衡。", "课件用 I<S、I>S、L<M、L>M 来区分四个区域。"], formula: "记法：IS 看 I 和 S；LM 看 L 和 M", intuition: "经济直觉：可以把它想成两个红绿灯。商品市场看“货卖得动吗”，货币市场看“钱够周转吗”。只要有一个灯没绿，经济就会继续调整，不会停在那个点上。", colorClass: "tag-joint" },
+      { tag: "IS-LM", title: "财政政策的效果", summary: "一句话：扩张性财政政策会让 IS 右移，通常使收入上升、利率上升。", details: ["比如政府购买增加。", "总需求先上升，收入提高。", "收入提高又会让货币需求增加，从而推高利率。"], formula: "财政扩张 -> IS 右移 -> Y↑，r↑", intuition: "经济直觉：政府多花钱，相当于直接往市场里塞进更多订单，企业先忙起来，收入先上去。可收入上去后，大家周转需要更多钱，钱变紧，利率被推高，所以财政扩张常常是一边拉高收入，一边推高利率。", colorClass: "tag-joint" },
+      { tag: "IS-LM", title: "货币政策的效果", summary: "一句话：扩张性货币政策会让 LM 右移或下移，通常使收入上升、利率下降。", details: ["比如央行增加货币供给。", "货币更多后，利率先下降。", "利率下降会刺激投资，进而带动收入上升。"], formula: "货币扩张 -> LM 右移/下移 -> Y↑，r↓", intuition: "经济直觉：货币变“多”了，人们手里出现多余货币，会拿去买债券；债券被抢购后，债券价格上升、利率下降。利率一降，企业更愿意投资，总需求上升，最后均衡收入也上升。", colorClass: "tag-joint" },
+      { tag: "易错点", title: "最容易混淆的两个“变”", summary: "一句话：沿曲线移动和整条曲线移动不是一回事。", details: ["利率变化，常常是沿着 IS 或 LM 曲线移动。", "自发支出变了，才会让 IS 整条移动。", "货币供给变了，才会让 LM 整条移动。"], formula: "利率变 -> 沿曲线动；结构性因素变 -> 曲线本身移动", intuition: "经济直觉：如果只是同一套规则下的结果变了，比如利率自己上下动，那只是沿着原来的轨道走；如果连规则本身都变了，比如政府多花钱、央行多放钱，那原来的整条轨道都会挪位置。", colorClass: "tag-mistake" },
+      { tag: "易错点", title: "挤出效应", summary: "一句话：财政扩张虽然会拉高收入，但也可能推高利率，从而压住一部分私人投资。", details: ["这就是为什么 IS-LM 里的财政乘数会比简单凯恩斯模型里更小。", "课件明确强调：收入上升 -> 货币需求上升 -> 利率上升 -> 私人投资被部分挤出。", "所以财政政策不是“完全照单全收”的效果。"], formula: "财政扩张 -> r↑ -> 私人投资部分减少", intuition: "经济直觉：政府多花的钱确实把市场带热了，但市场一热，钱就更紧，利率就上去。利率上去后，一些原本打算贷款投资的企业会打退堂鼓，所以政府拉起来的一部分需求，又被私人投资缩回去一点。", colorClass: "tag-mistake" }
+    ];
+
+    const filterLabels = ["全部", "IS", "LM", "IS-LM", "易错点"];
+    let activeFilter = "全部";
+    const filtersEl = document.getElementById("filters");
+    const cardsContainer = document.getElementById("cardsContainer");
+    const searchInput = document.getElementById("searchInput");
+
+    function renderFilters() {
+      filtersEl.innerHTML = "";
+      filterLabels.forEach(label => {
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (label === activeFilter ? " active" : "");
+        btn.textContent = label;
+        btn.addEventListener("click", () => {
+          activeFilter = label;
+          renderFilters();
+          renderCards();
+        });
+        filtersEl.appendChild(btn);
+      });
+    }
+
+    function renderCards() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      const result = cards.filter(card => {
+        const filterOk = activeFilter === "全部" || card.tag === activeFilter;
+        const searchOk = !keyword || [card.tag, card.title, card.summary, card.formula, ...card.details].join(" ").toLowerCase().includes(keyword);
+        return filterOk && searchOk;
+      });
+      cardsContainer.innerHTML = "";
+      if (!result.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "没有找到对应内容，换个关键词试试。";
+        cardsContainer.appendChild(empty);
+        return;
+      }
+      result.forEach(card => {
+        const item = document.createElement("article");
+        item.className = "card";
+        item.innerHTML = `
+          <div class="card-top">
+            <span class="card-tag ${card.colorClass}">${card.tag}</span>
+            <h3 class="card-title">${card.title}</h3>
+            <p class="card-summary">${card.summary}</p>
+          </div>
+          <div class="card-body">
+            <div>
+              <div class="mini-title">核心表达</div>
+              <div class="formula">${card.formula}</div>
+            </div>
+            <div>
+              <div class="mini-title">展开理解</div>
+              <ul>${card.details.map(line => `<li>${line}</li>`).join("")}</ul>
+            </div>
+            <div>
+              <div class="mini-title">经济直觉</div>
+              <div class="intuition"><strong>直觉：</strong>${card.intuition}</div>
+            </div>
+          </div>
+        `;
+        cardsContainer.appendChild(item);
+      });
+    }
+
+    searchInput.addEventListener("input", renderCards);
+    renderFilters();
+    renderCards();
+  </script>
+</body>
+</html>
