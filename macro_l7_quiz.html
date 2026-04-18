@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宏观 L7 刷题页</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #17202d;
+      --muted: #607081;
+      --line: #d6dfea;
+      --blue: #1e6da1;
+      --green: #25855d;
+      --red: #b4455e;
+      --gold: #c98e19;
+      --shadow: 0 10px 28px rgba(23, 32, 45, 0.08);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #eff4fa 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+    .hero, .panel, .question-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero, .panel { padding: 20px; }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.1;
+    }
+    .hero p, .panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .layout {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .sidebar, .main { display: grid; gap: 16px; }
+    .toolbar { display: grid; gap: 12px; }
+    .toolbar button, .action-btn, .choice-btn {
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.15s ease;
+    }
+    .action-btn {
+      background: var(--blue);
+      color: #fff;
+      padding: 12px 14px;
+    }
+    .action-btn.secondary {
+      background: #f8fbff;
+      color: var(--text);
+    }
+    select, input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .stat-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #fbfdff;
+    }
+    .stat-box strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    .stat-box span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .question-list { display: grid; gap: 14px; }
+    .question-card {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+    .question-head {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .b-is { background: var(--blue); }
+    .b-lm { background: var(--green); }
+    .b-joint { background: var(--gold); }
+    .question-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .choices, .answer-box { display: grid; gap: 10px; }
+    .choice-btn {
+      padding: 12px 14px;
+      background: #fbfdff;
+      color: var(--text);
+      text-align: left;
+    }
+    .choice-btn.selected {
+      border-color: var(--blue);
+      background: #edf6ff;
+    }
+    .choice-btn.correct {
+      border-color: var(--green);
+      background: #eefbf5;
+    }
+    .choice-btn.wrong {
+      border-color: var(--red);
+      background: #fff2f5;
+    }
+    .feedback {
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.7;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.ok {
+      background: #eefbf5;
+      border: 1px solid #c9ebd9;
+    }
+    .feedback.bad {
+      background: #fff2f5;
+      border: 1px solid #edc6d1;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .summary { display: none; gap: 12px; }
+    .summary.show { display: grid; }
+    .summary ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    .link {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1>宏观 L7 刷题页</h1>
+      <p>题目依据：<strong>宏观 L7 第十一章《国民收入的决定：IS-LM 模型》</strong>。当前题目按课件知识点整理，<strong>不是根据历年题风格拟合</strong>，因为你这次还没有上传往年题。</p>
+    </section>
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="panel toolbar">
+          <label>
+            <div style="margin-bottom:8px;font-size:14px;">选择题目范围</div>
+            <select id="topicFilter">
+              <option value="全部">全部</option>
+              <option value="IS">只刷 IS</option>
+              <option value="LM">只刷 LM</option>
+              <option value="IS-LM">只刷 IS-LM</option>
+            </select>
+          </label>
+          <button id="restartBtn" class="action-btn">重新开始本轮练习</button>
+          <button id="wrongOnlyBtn" class="action-btn secondary">只看错题</button>
+        </section>
+        <section class="panel">
+          <h2 style="margin:0 0 12px;font-size:18px;">做题统计</h2>
+          <div class="stat-grid">
+            <div class="stat-box"><strong id="doneCount">0</strong><span>已作答</span></div>
+            <div class="stat-box"><strong id="correctCount">0</strong><span>答对</span></div>
+            <div class="stat-box"><strong id="wrongCount">0</strong><span>答错</span></div>
+            <div class="stat-box"><strong id="accuracyText">0%</strong><span>正确率</span></div>
+          </div>
+        </section>
+        <section class="panel summary" id="summaryBox">
+          <h2 style="margin:0;font-size:18px;">复盘提示</h2>
+          <ul id="summaryList"></ul>
+        </section>
+        <section class="panel">
+          <p>先看知识卡片，再回来刷题，效果会更稳。</p>
+          <a class="link" href="./macro_l7_cards.html">打开知识卡片页</a>
+        </section>
+      </aside>
+      <main class="main">
+        <section id="questionList" class="question-list"></section>
+      </main>
+    </div>
+  </div>
+  <script>
+    const questionBank = [
+      { id: 1, topic: "IS", type: "single", question: "IS 曲线表示什么市场的均衡？", options: ["货币市场", "商品市场", "劳动市场", "外汇市场"], answer: 1, explanation: "IS 曲线表示商品市场均衡。课件中把它写成 Y=AD，也说明成 I=S。" },
+      { id: 2, topic: "IS", type: "single", question: "按课件逻辑，利率下降后最直接的传导顺序是什么？", options: ["利率下降 -> 货币需求下降 -> 收入上升", "利率下降 -> 投资上升 -> 收入上升", "利率下降 -> 储蓄上升 -> 收入上升", "利率下降 -> 政府支出上升 -> 收入上升"], answer: 1, explanation: "IS 曲线核心链条是：r 下降 -> I 上升 -> Y 上升。" },
+      { id: 3, topic: "IS", type: "judge", question: "投资对利率越敏感，IS 曲线通常越平缓。", options: ["正确", "错误"], answer: 0, explanation: "课件明确讲到：投资对利率越敏感，利率变化带来的收入变化越大，所以 IS 越平缓。" },
+      { id: 4, topic: "IS", type: "single", question: "下列哪一项最可能让 IS 曲线右移？", options: ["政府购买增加", "货币供给减少", "投机性货币需求增加", "利率上升"], answer: 0, explanation: "IS 看自发支出。政府购买增加属于扩张性财政政策，会让 IS 右移。" },
+      { id: 5, topic: "LM", type: "single", question: "LM 曲线表示什么市场的均衡？", options: ["商品市场", "货币市场", "国际市场", "资本市场"], answer: 1, explanation: "LM 曲线表示货币市场均衡，课件写成 M/P = L(r, Y)。" },
+      { id: 6, topic: "LM", type: "fill", question: "按课件中的简化形式，货币需求函数写作：L = ____Y - ____r。", blanks: ["k", "h"], explanation: "课件给出的简化形式是 L = kY - hr。" },
+      { id: 7, topic: "LM", type: "judge", question: "收入增加时，在货币供给不变的情况下，利率通常会上升。", options: ["正确", "错误"], answer: 0, explanation: "收入增加会带来更高的货币需求，因此利率上升，所以 LM 是正斜率。" },
+      { id: 8, topic: "LM", type: "single", question: "下列哪一项最接近“流动性陷阱”的意思？", options: ["利率很高时，人人都抢着买债券", "利率很低时，人们愿意持有任意多的货币", "收入很高时，消费完全不变", "政府支出增加时，货币需求下降"], answer: 1, explanation: "课件说：利率足够低时，人们愿意持有任意供给数量的货币。" },
+      { id: 9, topic: "LM", type: "single", question: "如果中央银行增加货币供给，LM 曲线通常会怎样变化？", options: ["左移/上移", "右移/下移", "不动", "先左后右"], answer: 1, explanation: "扩张性货币政策会增加实际货币供给，使 LM 右移或下移。" },
+      { id: 10, topic: "IS-LM", type: "single", question: "IS 和 LM 的交点表示什么？", options: ["只有商品市场均衡", "只有货币市场均衡", "商品市场和货币市场同时均衡", "财政政策失效"], answer: 2, explanation: "交点就是两种市场同时均衡，因此同时决定均衡收入 Y 和均衡利率 r。" },
+      { id: 11, topic: "IS-LM", type: "single", question: "扩张性财政政策在课件中的典型结果是什么？", options: ["Y 下降，r 下降", "Y 上升，r 上升", "Y 上升，r 下降", "Y 不变，r 上升"], answer: 1, explanation: "财政扩张会让 IS 右移，通常带来收入上升和利率上升。" },
+      { id: 12, topic: "IS-LM", type: "single", question: "扩张性货币政策在课件中的典型结果是什么？", options: ["Y 上升，r 下降", "Y 下降，r 上升", "Y 上升，r 上升", "Y 不变，r 下降"], answer: 0, explanation: "货币供给增加会让 LM 右移或下移，通常是 Y 上升、r 下降。" },
+      { id: 13, topic: "IS-LM", type: "judge", question: "在 IS-LM 模型中，财政扩张的收入效果会因为挤出效应而变小。", options: ["正确", "错误"], answer: 0, explanation: "课件明确指出：财政扩张会推高利率，进而部分挤出私人投资。" },
+      { id: 14, topic: "IS-LM", type: "single", question: "下面哪一项最符合“挤出效应”？", options: ["政府支出增加后，私人投资也一定等量增加", "财政扩张提高收入后，利率上升，私人投资被部分压住", "货币供给增加后，价格一定下降", "收入下降后，货币需求一定不变"], answer: 1, explanation: "挤出效应说的是：财政扩张带来的利率上升，会压住一部分私人投资。" },
+      { id: 15, topic: "IS-LM", type: "fill", question: "完成记忆链：M↑ -> r____ -> I____ -> Y____。", blanks: ["↓", "↑", "↑"], explanation: "课件中扩张性货币政策的核心链条是：M↑ -> r↓ -> I↑ -> Y↑。" }
+    ];
+
+    const state = {};
+    let showWrongOnly = false;
+    const topicFilter = document.getElementById("topicFilter");
+    const questionList = document.getElementById("questionList");
+    const doneCount = document.getElementById("doneCount");
+    const correctCount = document.getElementById("correctCount");
+    const wrongCount = document.getElementById("wrongCount");
+    const accuracyText = document.getElementById("accuracyText");
+    const summaryBox = document.getElementById("summaryBox");
+    const summaryList = document.getElementById("summaryList");
+
+    function escapeHtml(text) {
+      return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    function getVisibleQuestions() {
+      return questionBank.filter(q => {
+        const topicOk = topicFilter.value === "全部" || q.topic === topicFilter.value;
+        const wrongOnlyOk = !showWrongOnly || state[q.id]?.result === false;
+        return topicOk && wrongOnlyOk;
+      });
+    }
+
+    function renderQuestions() {
+      const visible = getVisibleQuestions();
+      questionList.innerHTML = "";
+      if (!visible.length) {
+        questionList.innerHTML = `<section class="panel"><p>当前没有可显示的题。可以切回“全部”，或者先做几道题再看错题。</p></section>`;
+        return;
+      }
+      visible.forEach((q, index) => {
+        const record = state[q.id] || {};
+        const card = document.createElement("section");
+        card.className = "question-card";
+        const badgeClass = q.topic === "IS" ? "b-is" : q.topic === "LM" ? "b-lm" : "b-joint";
+        card.innerHTML = `
+          <div class="question-head">
+            <span class="badge ${badgeClass}">${q.topic}</span>
+            <span style="font-size:13px;color:var(--muted);">第 ${index + 1} 题</span>
+          </div>
+          <h2 class="question-title">${escapeHtml(q.question)}</h2>
+          <div class="question-body"></div>
+          <div class="feedback ${record.result === true ? "ok show" : record.result === false ? "bad show" : ""}">
+            <strong>${record.result === false ? "回答不对。" : record.result === true ? "回答正确。" : ""}</strong>
+            <div style="margin-top:6px;">${record.result !== undefined ? escapeHtml(q.explanation) : ""}</div>
+          </div>
+        `;
+        const body = card.querySelector(".question-body");
+        if (q.type === "single" || q.type === "judge") {
+          const wrap = document.createElement("div");
+          wrap.className = "choices";
+          q.options.forEach((option, optionIndex) => {
+            const btn = document.createElement("button");
+            btn.className = "choice-btn";
+            if (record.selected === optionIndex) btn.classList.add("selected");
+            if (record.result !== undefined && optionIndex === q.answer) btn.classList.add("correct");
+            if (record.result === false && record.selected === optionIndex && optionIndex !== q.answer) btn.classList.add("wrong");
+            btn.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
+            btn.addEventListener("click", () => {
+              state[q.id] = { selected: optionIndex, result: optionIndex === q.answer };
+              updateStats();
+              renderQuestions();
+            });
+            wrap.appendChild(btn);
+          });
+          body.appendChild(wrap);
+        }
+        if (q.type === "fill") {
+          const answerBox = document.createElement("div");
+          answerBox.className = "answer-box";
+          const inputIds = q.blanks.map((_, i) => `q_${q.id}_${i}`);
+          answerBox.innerHTML = `
+            ${q.blanks.map((_, i) => `<input id="${inputIds[i]}" type="text" placeholder="第 ${i + 1} 空" value="${record.inputs?.[i] || ""}" />`).join("")}
+            <div class="hint">填空支持常见写法，比如箭头可填 ↑、↓，字母可填 k、h。</div>
+            <button class="action-btn">提交这一题</button>
+          `;
+          answerBox.querySelector("button").addEventListener("click", () => {
+            const inputs = inputIds.map(id => document.getElementById(id).value.trim());
+            const normalized = inputs.map(v => v.replaceAll(" ", "").toLowerCase());
+            const target = q.blanks.map(v => v.replaceAll(" ", "").toLowerCase());
+            const ok = normalized.length === target.length && normalized.every((v, i) => v === target[i]);
+            state[q.id] = { inputs, result: ok };
+            updateStats();
+            renderQuestions();
+          });
+          body.appendChild(answerBox);
+        }
+        questionList.appendChild(card);
+      });
+    }
+
+    function updateStats() {
+      const records = Object.values(state).filter(item => item.result !== undefined);
+      const done = records.length;
+      const correct = records.filter(item => item.result === true).length;
+      const wrong = records.filter(item => item.result === false).length;
+      const accuracy = done ? Math.round((correct / done) * 100) : 0;
+      doneCount.textContent = done;
+      correctCount.textContent = correct;
+      wrongCount.textContent = wrong;
+      accuracyText.textContent = `${accuracy}%`;
+      const tips = [];
+      const wrongTopics = new Map();
+      questionBank.forEach(q => {
+        if (state[q.id]?.result === false) {
+          wrongTopics.set(q.topic, (wrongTopics.get(q.topic) || 0) + 1);
+        }
+      });
+      if (wrongTopics.get("IS")) tips.push("IS 部分错题较多时，重点回看：负斜率、投资传导链、自发支出导致的右移。");
+      if (wrongTopics.get("LM")) tips.push("LM 部分错题较多时，重点回看：货币需求三动机、L=kY-hr、货币供给变化导致的 LM 移动。");
+      if (wrongTopics.get("IS-LM")) tips.push("IS-LM 联合题错得多时，重点回看：财政扩张与货币扩张对 Y 和 r 的方向影响。");
+      if (wrong > 0) tips.push("最容易混淆的是“沿曲线移动”和“整条曲线移动”。");
+      if (tips.length) {
+        summaryBox.classList.add("show");
+        summaryList.innerHTML = tips.map(line => `<li>${line}</li>`).join("");
+      } else {
+        summaryBox.classList.remove("show");
+        summaryList.innerHTML = "";
+      }
+    }
+
+    document.getElementById("restartBtn").addEventListener("click", () => {
+      Object.keys(state).forEach(key => delete state[key]);
+      showWrongOnly = false;
+      document.getElementById("wrongOnlyBtn").textContent = "只看错题";
+      updateStats();
+      renderQuestions();
+    });
+
+    document.getElementById("wrongOnlyBtn").addEventListener("click", () => {
+      showWrongOnly = !showWrongOnly;
+      document.getElementById("wrongOnlyBtn").textContent = showWrongOnly ? "显示全部题" : "只看错题";
+      renderQuestions();
+    });
+
+    topicFilter.addEventListener("change", renderQuestions);
+    updateStats();
+    renderQuestions();
+  </script>
+</body>
+</html>
