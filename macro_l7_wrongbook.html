@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宏观 L7 错题本</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #17202d;
+      --muted: #607081;
+      --line: #d6dfea;
+      --blue: #1e6da1;
+      --green: #25855d;
+      --red: #b4455e;
+      --gold: #c98e19;
+      --shadow: 0 10px 28px rgba(23, 32, 45, 0.08);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #eff4fa 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+    .page {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+    .hero, .panel, .item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero, .panel, .item {
+      padding: 20px;
+    }
+    .hero {
+      display: grid;
+      gap: 12px;
+    }
+    .hero h1, .panel h2, .item h2, .item p {
+      margin: 0;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.1;
+    }
+    .hero p, .panel p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .layout {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .sidebar, .main {
+      display: grid;
+      gap: 16px;
+    }
+    .toolbar {
+      display: grid;
+      gap: 12px;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 11px 14px;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      display: inline-block;
+      width: fit-content;
+    }
+    .btn.secondary {
+      background: #f8fbff;
+      color: var(--text);
+    }
+    .count {
+      display: block;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .link-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .link {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+    .item {
+      display: grid;
+      gap: 12px;
+    }
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .b-is { background: var(--blue); }
+    .b-lm { background: var(--green); }
+    .b-joint { background: var(--gold); }
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .block {
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .block.user {
+      background: #fff2f5;
+      border: 1px solid #edc6d1;
+    }
+    .block.answer {
+      background: #eefbf5;
+      border: 1px solid #c9ebd9;
+    }
+    .block.intuition {
+      background: #f3f9ff;
+      border: 1px solid #d9e9f6;
+    }
+    .block strong {
+      display: inline-block;
+      margin-right: 6px;
+    }
+    .item-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .empty {
+      padding: 30px 16px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1>宏观 L7 错题本</h1>
+      <p>这里会显示你在刷题页中答错过的题。错题记录保存在当前浏览器里，所以电脑和手机会分别保存各自的错题本。</p>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="panel toolbar">
+          <label>
+            <div style="margin-bottom:8px;font-size:14px;">按主题筛选</div>
+            <select id="topicFilter">
+              <option value="全部">全部</option>
+              <option value="IS">IS</option>
+              <option value="LM">LM</option>
+              <option value="IS-LM">IS-LM</option>
+            </select>
+          </label>
+          <label>
+            <div style="margin-bottom:8px;font-size:14px;">搜索题目</div>
+            <input id="searchInput" type="text" placeholder="输入关键词，例如：流动性陷阱 / 财政扩张" />
+          </label>
+          <button id="clearBtn" class="btn secondary">清空当前浏览器的错题</button>
+        </section>
+
+        <section class="panel">
+          <h2 style="margin:0 0 12px;font-size:18px;">错题数量</h2>
+          <span class="count" id="wrongCountText">0</span>
+          <p>这个数量只统计当前浏览器里保存的错题。</p>
+        </section>
+
+        <section class="panel">
+          <p>可以回到刷题页继续做题，也可以先回知识卡片页重新看一遍逻辑。</p>
+          <div class="link-list">
+            <a class="link" href="./macro_l7_quiz.html">打开刷题页</a>
+            <a class="link" href="./macro_l7_cards.html">打开知识卡片页</a>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section id="wrongList" class="list"></section>
+      </main>
+    </div>
+  </div>
+
+  <script src="./macro_l7_questions.js"></script>
+  <script>
+    const WRONG_BOOK_KEY = "macroL7WrongBook";
+    const questionBank = window.macroL7QuestionBank || [];
+    const topicFilter = document.getElementById("topicFilter");
+    const searchInput = document.getElementById("searchInput");
+    const wrongList = document.getElementById("wrongList");
+    const wrongCountText = document.getElementById("wrongCountText");
+
+    function escapeHtml(text) {
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    function loadWrongBook() {
+      try {
+        return JSON.parse(localStorage.getItem(WRONG_BOOK_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveWrongBook(data) {
+      localStorage.setItem(WRONG_BOOK_KEY, JSON.stringify(data));
+    }
+
+    function getCorrectAnswer(q) {
+      if (q.type === "single" || q.type === "judge") {
+        return `${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}`;
+      }
+      if (q.type === "fill") {
+        return q.blanks.join(" / ");
+      }
+      return "";
+    }
+
+    function getVisibleItems() {
+      const wrongBook = loadWrongBook();
+      const keyword = searchInput.value.trim().toLowerCase();
+      return questionBank
+        .filter(q => wrongBook[q.id])
+        .filter(q => topicFilter.value === "全部" || q.topic === topicFilter.value)
+        .filter(q => !keyword || `${q.question} ${q.explanation} ${q.intuition}`.toLowerCase().includes(keyword))
+        .map(q => ({ question: q, record: wrongBook[q.id] }))
+        .sort((a, b) => (b.record.lastWrongAt || "").localeCompare(a.record.lastWrongAt || ""));
+    }
+
+    function render() {
+      const items = getVisibleItems();
+      const wrongBook = loadWrongBook();
+      wrongCountText.textContent = Object.keys(wrongBook).length;
+      wrongList.innerHTML = "";
+
+      if (!items.length) {
+        wrongList.innerHTML = `<section class="empty">当前没有符合条件的错题。先去刷题页做题，答错的题会自动出现在这里。</section>`;
+        return;
+      }
+
+      items.forEach(({ question: q, record }) => {
+        const badgeClass = q.topic === "IS" ? "b-is" : q.topic === "LM" ? "b-lm" : "b-joint";
+        const item = document.createElement("article");
+        item.className = "item";
+        item.innerHTML = `
+          <div class="head">
+            <span class="badge ${badgeClass}">${q.topic}</span>
+            <span class="meta">累计错了 ${record.wrongCount} 次</span>
+            <span class="meta">最近一次：${escapeHtml(record.lastWrongAt || "未知时间")}</span>
+          </div>
+          <h2 style="font-size:18px;line-height:1.7;">${escapeHtml(q.question)}</h2>
+          <div class="block user"><strong>你上次的答案：</strong>${escapeHtml(record.lastUserAnswer || "未记录")}</div>
+          <div class="block answer"><strong>正确答案：</strong>${escapeHtml(getCorrectAnswer(q))}<br /><strong>解析：</strong>${escapeHtml(q.explanation)}</div>
+          <div class="block intuition"><strong>经济直觉：</strong>${escapeHtml(q.intuition || "这题暂无额外直觉说明。")}</div>
+          <div class="item-actions">
+            <a class="btn" href="./macro_l7_quiz.html">回到刷题页再做</a>
+            <button class="btn secondary" data-remove="${q.id}">从错题本移除</button>
+          </div>
+        `;
+        wrongList.appendChild(item);
+      });
+
+      wrongList.querySelectorAll("[data-remove]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const wrongBook = loadWrongBook();
+          delete wrongBook[btn.dataset.remove];
+          saveWrongBook(wrongBook);
+          render();
+        });
+      });
+    }
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      localStorage.removeItem(WRONG_BOOK_KEY);
+      render();
+    });
+
+    topicFilter.addEventListener("change", render);
+    searchInput.addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>
