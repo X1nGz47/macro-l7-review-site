@@ -294,7 +294,7 @@
           <div class="head">
             <span class="badge ${badgeClass}">${q.topic}</span>
             <span class="meta">累计错了 ${record.wrongCount} 次</span>
-            <span class="meta">最近一次：${escapeHtml(record.lastWrongAt || "未知时间")}</span>
+            <span class="meta">最近一次：${escapeHtml(record.lastWrongAtText || record.lastWrongAt || "未知时间")}</span>
           </div>
           <h2 style="font-size:18px;line-height:1.7;">${escapeHtml(q.question)}</h2>
           <div class="block user"><strong>你上次的答案：</strong>${escapeHtml(record.lastUserAnswer || "未记录")}</div>
