@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宏观复习详情</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #17202d;
+      --muted: #607081;
+      --line: #d6dfea;
+      --blue: #1e6da1;
+      --green: #25855d;
+      --gold: #c98e19;
+      --red: #b4455e;
+      --shadow: 0 10px 28px rgba(23, 32, 45, 0.08);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(180deg, #edf4fb 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    .page {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 42px;
+    }
+    .hero, .panel, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+    }
+    .hero h1, .panel h2, .card h3, .panel p, .hero p {
+      margin: 0;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.1;
+    }
+    .hero p, .panel p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      color: var(--muted);
+    }
+    .warn {
+      border-left: 4px solid var(--gold);
+      background: #fff9ef;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .layout {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .sidebar, .main {
+      display: grid;
+      gap: 16px;
+    }
+    .panel {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .link-list {
+      display: grid;
+      gap: 8px;
+    }
+    .link {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .section {
+      display: grid;
+      gap: 14px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .card h3 {
+      font-size: 18px;
+    }
+    .card p, .card li {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .formula-box {
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fafcff;
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .section-title {
+      font-size: 22px;
+      margin: 2px 0 0;
+    }
+    .empty {
+      padding: 30px 16px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    .btn {
+      display: inline-block;
+      width: fit-content;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section id="hero" class="hero"></section>
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>复习路径</h2>
+          <p>建议顺序：先看一句话总览，再看知识结构，最后查易混点和复习提醒。</p>
+        </section>
+        <section class="panel">
+          <h2>页面跳转</h2>
+          <div class="link-list">
+            <a class="link" href="./index.html">返回导航首页</a>
+            <a class="link" href="./macro_l7_cards.html">L7 知识卡片</a>
+            <a class="link" href="./macro_l7_quiz.html">L7 刷题页</a>
+            <a class="link" href="./macro_l7_wrongbook.html">L7 错题本</a>
+          </div>
+        </section>
+        <section id="relatedPanel" class="panel" style="display:none;">
+          <h2>配套页面</h2>
+          <div id="relatedLinks" class="link-list"></div>
+        </section>
+      </aside>
+
+      <section class="main section">
+        <div class="cards">
+          <article class="card">
+            <h3>一句话总览</h3>
+            <ul id="overviewList"></ul>
+          </article>
+          <article class="card">
+            <h3>公式 / 关键表达</h3>
+            <div id="formulaBox" class="formula-box"></div>
+          </article>
+        </div>
+
+        <section class="section">
+          <h2 class="section-title">知识结构</h2>
+          <div id="structureCards" class="cards"></div>
+        </section>
+
+        <section class="cards">
+          <article class="card">
+            <h3>易混点</h3>
+            <ul id="confusionList"></ul>
+          </article>
+          <article class="card">
+            <h3>复习提醒</h3>
+            <ul id="tipsList"></ul>
+          </article>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script src="./macro_review_topics.js"></script>
+  <script>
+    const topics = window.macroReviewTopics || {};
+    const params = new URLSearchParams(window.location.search);
+    const topicId = params.get("topic") || "l1";
+    const topic = topics[topicId];
+
+    function escapeHtml(text) {
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    function renderList(el, items) {
+      el.innerHTML = (items || []).map(item => `<li>${escapeHtml(item)}</li>`).join("");
+    }
+
+    if (!topic) {
+      document.querySelector(".page").innerHTML = `
+        <section class="empty">
+          没有找到对应讲次。<br />
+          <a class="link" href="./index.html">返回导航首页</a>
+        </section>
+      `;
+    } else {
+      document.title = `${topic.title} - 宏观复习`;
+      document.getElementById("hero").innerHTML = `
+        <h1>${escapeHtml(topic.title)}</h1>
+        <p>${escapeHtml(topic.summary)}</p>
+        <div class="meta">
+          <span class="pill">${escapeHtml(topic.tag)}</span>
+          <span class="pill">${escapeHtml(topic.source)}</span>
+        </div>
+        ${topic.note ? `<div class="warn">${escapeHtml(topic.note)}</div>` : ""}
+      `;
+
+      renderList(document.getElementById("overviewList"), topic.overview);
+      document.getElementById("formulaBox").innerHTML = (topic.formulas || []).map(line => `<div>${escapeHtml(line)}</div>`).join("");
+      renderList(document.getElementById("confusionList"), topic.confusions);
+      renderList(document.getElementById("tipsList"), topic.reviewTips);
+
+      const structureCards = document.getElementById("structureCards");
+      structureCards.innerHTML = (topic.structure || []).map(section => `
+        <article class="card">
+          <h3>${escapeHtml(section.title)}</h3>
+          <ul>${(section.items || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </article>
+      `).join("");
+
+      if (topic.relatedLinks && topic.relatedLinks.length) {
+        document.getElementById("relatedPanel").style.display = "grid";
+        document.getElementById("relatedLinks").innerHTML = topic.relatedLinks
+          .map(link => `<a class="link" href="${link.href}">${escapeHtml(link.label)}</a>`)
+          .join("");
+      }
+    }
+  </script>
+</body>
+</html>
