@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>宏观 L7 复习入口</title>
+  <title>宏观经济学复习导航</title>
   <style>
     :root {
       --bg: #f4f7fb;
@@ -13,6 +13,7 @@
       --line: #d6dfea;
       --blue: #1e6da1;
       --green: #25855d;
+      --gold: #c98e19;
       --shadow: 0 10px 28px rgba(23, 32, 45, 0.08);
       --radius: 8px;
     }
@@ -24,15 +25,13 @@
       color: var(--text);
     }
     .page {
-      min-height: 100vh;
-      width: min(920px, calc(100% - 32px));
+      width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
+      padding: 24px 0 42px;
       display: grid;
-      align-content: center;
-      padding: 24px 0 40px;
       gap: 18px;
     }
-    .hero, .card {
+    .hero, .panel, .card {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -43,25 +42,87 @@
       display: grid;
       gap: 14px;
     }
-    h1, h2, p { margin: 0; }
-    h1 {
-      font-size: clamp(28px, 5vw, 42px);
-      line-height: 1.1;
+    .hero h1, .hero p, .panel h2, .panel p, .card h3, .card p {
+      margin: 0;
     }
-    .hero p, .card p {
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.08;
+    }
+    .hero p, .panel p, .card p {
       color: var(--muted);
       line-height: 1.8;
       font-size: 15px;
     }
-    .grid {
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .layout {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .sidebar, .main {
+      display: grid;
       gap: 16px;
     }
-    .card {
-      padding: 20px;
+    .panel {
+      padding: 18px;
       display: grid;
+      gap: 12px;
+    }
+    .panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+    .section {
+      display: grid;
+      gap: 12px;
+    }
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 14px;
+    }
+    .card {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
     }
     .tag {
       width: fit-content;
@@ -72,48 +133,168 @@
     }
     .tag-blue { background: var(--blue); }
     .tag-green { background: var(--green); }
+    .tag-gold { background: var(--gold); }
+    .card h3 {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2px;
+    }
     .btn {
       display: inline-block;
       width: fit-content;
       text-decoration: none;
       border-radius: var(--radius);
-      padding: 11px 14px;
+      padding: 10px 14px;
       color: #fff;
       background: var(--blue);
       font-size: 14px;
     }
-    .btn.green { background: var(--green); }
+    .btn.secondary {
+      background: var(--green);
+    }
+    .empty {
+      padding: 28px 14px;
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <main class="page">
     <section class="hero">
-      <h1>宏观 L7 复习入口</h1>
-      <p>内容依据：宏观 L7 第十一章《国民收入的决定：IS-LM 模型》。这里有三个页面：先看知识结构，再做题，最后回到错题本复盘。</p>
+      <h1>宏观经济学复习导航</h1>
+      <p>这个首页现在是你的复习导航站。你可以先按讲次看 L1-L6 的核心整理，再进入 L7 的知识卡片、刷题页和错题本，整个复习会更顺。</p>
+      <div class="meta">
+        <span class="pill">内容依据：你上传的宏观 L1-L7 材料</span>
+        <span class="pill">当前已整理：L1-L6 导航页 + L7 交互工具</span>
+        <span class="pill">适合手机和电脑一起用</span>
+      </div>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <span class="tag tag-blue">知识复习</span>
-        <h2>知识可视化卡片</h2>
-        <p>适合先看一遍结构。里面有 IS、LM、IS-LM 共同均衡、政策效果、易错点，还有“经济直觉”帮助理解。</p>
-        <a class="btn" href="./macro_l7_cards.html">打开知识卡片</a>
-      </article>
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>推荐顺序</h2>
+          <ul>
+            <li>先看 L1-L2，把指标、失业、通胀这些基础概念理顺。</li>
+            <li>再看 L3-L4，把收入支出模型和乘数机制连起来。</li>
+            <li>再看 L6，把 IS-LM 的逻辑接上。</li>
+            <li>最后去 L7 工具区刷题和复盘错题。</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h2>快速搜索</h2>
+          <input id="searchInput" class="search" type="text" placeholder="输入关键词，例如：GDP / 乘数 / IS-LM / 失业" />
+        </section>
+      </aside>
 
-      <article class="card">
-        <span class="tag tag-green">练习刷题</span>
-        <h2>交互式刷题页</h2>
-        <p>适合做选择、判断和填空题。支持即时判分、按主题筛题，并且会自动把错题记到错题本。</p>
-        <a class="btn green" href="./macro_l7_quiz.html">打开刷题页</a>
-      </article>
+      <section class="main">
+        <section class="section">
+          <div class="section-head">
+            <h2>讲义导航</h2>
+            <p style="margin:0;color:var(--muted);font-size:14px;">L1-L6 已整理成可点开的复习页</p>
+          </div>
+          <div id="lectureCards" class="cards"></div>
+        </section>
 
-      <article class="card">
-        <span class="tag tag-blue">错题复盘</span>
-        <h2>错题本页</h2>
-        <p>适合集中看自己做错过的题。里面会显示上次错误答案、正确答案、解析和经济直觉。</p>
-        <a class="btn" href="./macro_l7_wrongbook.html">打开错题本</a>
-      </article>
-    </section>
+        <section class="section">
+          <div class="section-head">
+            <h2>交互工具</h2>
+            <p style="margin:0;color:var(--muted);font-size:14px;">L7 适合最后集中练习和查错</p>
+          </div>
+          <div id="toolCards" class="cards">
+            <article class="card" data-search="L7 知识卡片 IS LM IS-LM 经济直觉">
+              <span class="tag tag-blue">知识复习</span>
+              <h3>L7 知识可视化卡片</h3>
+              <p>适合快速看 IS、LM、共同均衡、政策效果和易错点，还带经济直觉。</p>
+              <div class="btn-row">
+                <a class="btn" href="./macro_l7_cards.html">打开知识卡片</a>
+              </div>
+            </article>
+            <article class="card" data-search="L7 刷题 选择 判断 填空 错题">
+              <span class="tag tag-green">练习刷题</span>
+              <h3>L7 交互式刷题页</h3>
+              <p>支持即时判分、经济直觉解析、按主题筛题，并自动把错题记入错题本。</p>
+              <div class="btn-row">
+                <a class="btn secondary" href="./macro_l7_quiz.html">打开刷题页</a>
+              </div>
+            </article>
+            <article class="card" data-search="L7 错题本 复盘 解析 经济直觉">
+              <span class="tag tag-gold">错题复盘</span>
+              <h3>L7 错题本页</h3>
+              <p>集中看自己错过的题，里面会显示上次错误答案、正确答案、解析和经济直觉。</p>
+              <div class="btn-row">
+                <a class="btn" href="./macro_l7_wrongbook.html">打开错题本</a>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </div>
   </main>
+
+  <script src="./macro_review_topics.js"></script>
+  <script>
+    const topics = window.macroReviewTopics || {};
+    const lectureCards = document.getElementById("lectureCards");
+    const searchInput = document.getElementById("searchInput");
+
+    function escapeHtml(text) {
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    function lectureCard(topic) {
+      const searchText = [topic.title, topic.summary, topic.tag, ...(topic.overview || []), ...(topic.confusions || [])].join(" ");
+      return `
+        <article class="card" data-search="${escapeHtml(searchText)}">
+          <span class="tag tag-blue">${escapeHtml(topic.tag)}</span>
+          <h3>${escapeHtml(topic.title)}</h3>
+          <p>${escapeHtml(topic.summary)}</p>
+          <p style="font-size:13px;">${escapeHtml(topic.source)}</p>
+          <div class="btn-row">
+            <a class="btn" href="./macro_review_topic.html?topic=${topic.id}">打开复习页</a>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderLectures() {
+      const lectureOrder = ["l1", "l2", "l3", "l4", "l5", "l6"];
+      lectureCards.innerHTML = lectureOrder.map(id => lectureCard(topics[id])).join("");
+    }
+
+    function filterCards() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search]").forEach(card => {
+        const hit = !keyword || card.dataset.search.toLowerCase().includes(keyword);
+        card.style.display = hit ? "grid" : "none";
+      });
+      const visibleLecture = [...lectureCards.children].some(el => el.style.display !== "none");
+      if (!visibleLecture && !lectureCards.querySelector(".empty")) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "没有找到匹配的讲义页，换个关键词试试。";
+        lectureCards.appendChild(empty);
+      }
+      const stale = lectureCards.querySelector(".empty");
+      if (visibleLecture && stale) stale.remove();
+    }
+
+    renderLectures();
+    searchInput.addEventListener("input", filterCards);
+  </script>
 </body>
 </html>
