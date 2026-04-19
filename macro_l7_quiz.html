@@ -165,6 +165,13 @@
       background: #fff2f5;
       border: 1px solid #edc6d1;
     }
+    .feedback-block {
+      margin-top: 8px;
+    }
+    .feedback-label {
+      font-weight: 700;
+      color: var(--text);
+    }
     .hint {
       color: var(--muted);
       font-size: 13px;
@@ -182,6 +189,16 @@
       color: var(--blue);
       text-decoration: none;
       font-size: 14px;
+    }
+    .link-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .inline-note {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
     }
     @media (max-width: 920px) {
       .layout { grid-template-columns: 1fr; }
@@ -224,7 +241,11 @@
         </section>
         <section class="panel">
           <p>先看知识卡片，再回来刷题，效果会更稳。</p>
-          <a class="link" href="./macro_l7_cards.html">打开知识卡片页</a>
+          <div class="link-list">
+            <a class="link" href="./macro_l7_cards.html">打开知识卡片页</a>
+            <a class="link" href="./macro_l7_wrongbook.html">打开错题本页</a>
+          </div>
+          <p class="inline-note">当前浏览器已记录 <strong id="wrongBookCountText">0</strong> 道错题。</p>
         </section>
       </aside>
       <main class="main">
@@ -232,27 +253,13 @@
       </main>
     </div>
   </div>
+  <script src="./macro_l7_questions.js"></script>
   <script>
-    const questionBank = [
-      { id: 1, topic: "IS", type: "single", question: "IS 曲线表示什么市场的均衡？", options: ["货币市场", "商品市场", "劳动市场", "外汇市场"], answer: 1, explanation: "IS 曲线表示商品市场均衡。课件中把它写成 Y=AD，也说明成 I=S。" },
-      { id: 2, topic: "IS", type: "single", question: "按课件逻辑，利率下降后最直接的传导顺序是什么？", options: ["利率下降 -> 货币需求下降 -> 收入上升", "利率下降 -> 投资上升 -> 收入上升", "利率下降 -> 储蓄上升 -> 收入上升", "利率下降 -> 政府支出上升 -> 收入上升"], answer: 1, explanation: "IS 曲线核心链条是：r 下降 -> I 上升 -> Y 上升。" },
-      { id: 3, topic: "IS", type: "judge", question: "投资对利率越敏感，IS 曲线通常越平缓。", options: ["正确", "错误"], answer: 0, explanation: "课件明确讲到：投资对利率越敏感，利率变化带来的收入变化越大，所以 IS 越平缓。" },
-      { id: 4, topic: "IS", type: "single", question: "下列哪一项最可能让 IS 曲线右移？", options: ["政府购买增加", "货币供给减少", "投机性货币需求增加", "利率上升"], answer: 0, explanation: "IS 看自发支出。政府购买增加属于扩张性财政政策，会让 IS 右移。" },
-      { id: 5, topic: "LM", type: "single", question: "LM 曲线表示什么市场的均衡？", options: ["商品市场", "货币市场", "国际市场", "资本市场"], answer: 1, explanation: "LM 曲线表示货币市场均衡，课件写成 M/P = L(r, Y)。" },
-      { id: 6, topic: "LM", type: "fill", question: "按课件中的简化形式，货币需求函数写作：L = ____Y - ____r。", blanks: ["k", "h"], explanation: "课件给出的简化形式是 L = kY - hr。" },
-      { id: 7, topic: "LM", type: "judge", question: "收入增加时，在货币供给不变的情况下，利率通常会上升。", options: ["正确", "错误"], answer: 0, explanation: "收入增加会带来更高的货币需求，因此利率上升，所以 LM 是正斜率。" },
-      { id: 8, topic: "LM", type: "single", question: "下列哪一项最接近“流动性陷阱”的意思？", options: ["利率很高时，人人都抢着买债券", "利率很低时，人们愿意持有任意多的货币", "收入很高时，消费完全不变", "政府支出增加时，货币需求下降"], answer: 1, explanation: "课件说：利率足够低时，人们愿意持有任意供给数量的货币。" },
-      { id: 9, topic: "LM", type: "single", question: "如果中央银行增加货币供给，LM 曲线通常会怎样变化？", options: ["左移/上移", "右移/下移", "不动", "先左后右"], answer: 1, explanation: "扩张性货币政策会增加实际货币供给，使 LM 右移或下移。" },
-      { id: 10, topic: "IS-LM", type: "single", question: "IS 和 LM 的交点表示什么？", options: ["只有商品市场均衡", "只有货币市场均衡", "商品市场和货币市场同时均衡", "财政政策失效"], answer: 2, explanation: "交点就是两种市场同时均衡，因此同时决定均衡收入 Y 和均衡利率 r。" },
-      { id: 11, topic: "IS-LM", type: "single", question: "扩张性财政政策在课件中的典型结果是什么？", options: ["Y 下降，r 下降", "Y 上升，r 上升", "Y 上升，r 下降", "Y 不变，r 上升"], answer: 1, explanation: "财政扩张会让 IS 右移，通常带来收入上升和利率上升。" },
-      { id: 12, topic: "IS-LM", type: "single", question: "扩张性货币政策在课件中的典型结果是什么？", options: ["Y 上升，r 下降", "Y 下降，r 上升", "Y 上升，r 上升", "Y 不变，r 下降"], answer: 0, explanation: "货币供给增加会让 LM 右移或下移，通常是 Y 上升、r 下降。" },
-      { id: 13, topic: "IS-LM", type: "judge", question: "在 IS-LM 模型中，财政扩张的收入效果会因为挤出效应而变小。", options: ["正确", "错误"], answer: 0, explanation: "课件明确指出：财政扩张会推高利率，进而部分挤出私人投资。" },
-      { id: 14, topic: "IS-LM", type: "single", question: "下面哪一项最符合“挤出效应”？", options: ["政府支出增加后，私人投资也一定等量增加", "财政扩张提高收入后，利率上升，私人投资被部分压住", "货币供给增加后，价格一定下降", "收入下降后，货币需求一定不变"], answer: 1, explanation: "挤出效应说的是：财政扩张带来的利率上升，会压住一部分私人投资。" },
-      { id: 15, topic: "IS-LM", type: "fill", question: "完成记忆链：M↑ -> r____ -> I____ -> Y____。", blanks: ["↓", "↑", "↑"], explanation: "课件中扩张性货币政策的核心链条是：M↑ -> r↓ -> I↑ -> Y↑。" }
-    ];
-
+    const questionBank = window.macroL7QuestionBank || [];
+    const WRONG_BOOK_KEY = "macroL7WrongBook";
     const state = {};
     let showWrongOnly = false;
+    let wrongBook = loadWrongBook();
     const topicFilter = document.getElementById("topicFilter");
     const questionList = document.getElementById("questionList");
     const doneCount = document.getElementById("doneCount");
@@ -261,9 +268,66 @@
     const accuracyText = document.getElementById("accuracyText");
     const summaryBox = document.getElementById("summaryBox");
     const summaryList = document.getElementById("summaryList");
+    const wrongBookCountText = document.getElementById("wrongBookCountText");
 
     function escapeHtml(text) {
-      return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    function loadWrongBook() {
+      try {
+        return JSON.parse(localStorage.getItem(WRONG_BOOK_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveWrongBook() {
+      localStorage.setItem(WRONG_BOOK_KEY, JSON.stringify(wrongBook));
+      wrongBookCountText.textContent = Object.keys(wrongBook).length;
+    }
+
+    function formatCorrectAnswer(q) {
+      if (q.type === "single" || q.type === "judge") {
+        return `${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}`;
+      }
+      if (q.type === "fill") {
+        return q.blanks.join(" / ");
+      }
+      return "";
+    }
+
+    function formatUserAnswer(q, record) {
+      if (q.type === "single" || q.type === "judge") {
+        if (record.selected === undefined) return "未作答";
+        return `${String.fromCharCode(65 + record.selected)}. ${q.options[record.selected]}`;
+      }
+      if (q.type === "fill") {
+        return (record.inputs || []).join(" / ") || "未作答";
+      }
+      return "未作答";
+    }
+
+    function buildFeedback(q, record) {
+      if (record.result === undefined) return "";
+      return `
+        <div class="feedback-block"><span class="feedback-label">正确答案：</span>${escapeHtml(formatCorrectAnswer(q))}</div>
+        <div class="feedback-block"><span class="feedback-label">解析：</span>${escapeHtml(q.explanation)}</div>
+        <div class="feedback-block"><span class="feedback-label">经济直觉：</span>${escapeHtml(q.intuition || "这题暂无额外直觉说明。")}</div>
+      `;
+    }
+
+    function updateWrongBookEntry(q, record) {
+      if (record.result !== false) return;
+      const previous = wrongBook[q.id] || { wrongCount: 0 };
+      wrongBook[q.id] = {
+        id: q.id,
+        topic: q.topic,
+        wrongCount: previous.wrongCount + 1,
+        lastWrongAt: new Date().toLocaleString("zh-CN"),
+        lastUserAnswer: formatUserAnswer(q, record)
+      };
+      saveWrongBook();
     }
 
     function getVisibleQuestions() {
@@ -295,7 +359,7 @@
           <div class="question-body"></div>
           <div class="feedback ${record.result === true ? "ok show" : record.result === false ? "bad show" : ""}">
             <strong>${record.result === false ? "回答不对。" : record.result === true ? "回答正确。" : ""}</strong>
-            <div style="margin-top:6px;">${record.result !== undefined ? escapeHtml(q.explanation) : ""}</div>
+            <div style="margin-top:6px;">${buildFeedback(q, record)}</div>
           </div>
         `;
         const body = card.querySelector(".question-body");
@@ -310,7 +374,9 @@
             if (record.result === false && record.selected === optionIndex && optionIndex !== q.answer) btn.classList.add("wrong");
             btn.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
             btn.addEventListener("click", () => {
-              state[q.id] = { selected: optionIndex, result: optionIndex === q.answer };
+              const record = { selected: optionIndex, result: optionIndex === q.answer };
+              state[q.id] = record;
+              updateWrongBookEntry(q, record);
               updateStats();
               renderQuestions();
             });
@@ -332,7 +398,9 @@
             const normalized = inputs.map(v => v.replaceAll(" ", "").toLowerCase());
             const target = q.blanks.map(v => v.replaceAll(" ", "").toLowerCase());
             const ok = normalized.length === target.length && normalized.every((v, i) => v === target[i]);
-            state[q.id] = { inputs, result: ok };
+            const record = { inputs, result: ok };
+            state[q.id] = record;
+            updateWrongBookEntry(q, record);
             updateStats();
             renderQuestions();
           });
@@ -387,6 +455,7 @@
     });
 
     topicFilter.addEventListener("change", renderQuestions);
+    saveWrongBook();
     updateStats();
     renderQuestions();
   </script>
